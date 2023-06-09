@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta charset="utf-8">
+    <meta name="description" content="cashflow">
+    <meta name="keywords" content="HTML, CSS, JS, Java, ucode, unitfactory, cbl, cblworld">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>cashflow</title>
+    <link rel="shortcut icon" th:href="@{/resources/go-green/favicon.ico}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/resources/reset.css}"/>
+    <link rel="stylesheet" th:href="@{/resources/general.css}"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+    <script th:src="@{/resources/general.js}"></script>
+    <script th:src="@{/resources/wallets.js}"></script>
+    <script th:src="@{/resources/wallets_requests.js}"></script>
+</head>
+
+<body>
+    <div class="backcolor"></div>
+    <div class="body-block shadow-large">
+
+        <section class="section1">
+            <a id="authorizedLogin" sec:authorize="isAuthenticated()" sec:authentication="name"></a>
+            <a class="abutton" href="/logout">Вийти</a>
+        </section>
+        
+        <header class="section2">
+            <a href="/"><img id="logo" th:src="@{/resources/img/logo.png}"></a>
+            <div class="section3">
+                <a class="header-button active">
+                    <img th:src="@{/resources/go-green/dollar_sign.png}">
+                    <span>Гаманці</span>
+                </a>
+                <a class="header-button" href="transactions">
+                    <img th:src="@{/resources/go-green/list.png}">
+                    <span>Транзакції</span>
+                </a>
+                 <a class="header-button" href="categories">
+                    <img th:src="@{/resources/go-green/server.png}">
+                    <span>Категорії</span>
+                </a>
+                <a class="header-button" href="statistics">
+                    <img th:src="@{/resources/go-green/stats.png}">
+                    <span>Статистика</span>
+                </a>
+                <a class="header-button" href="https://api.monobank.ua" target="_blank">
+                    <img th:src="@{/resources/go-green/stats.png}">
+                    <span>Монобанк</span>
+                </a>
+            </div>
+        </header>
+
+        <section class="section4"
+                 ng-app="get_form" ng-controller="GetController" data-ng-init="getItems()">
+
+            <div class="page_width page_head">
+                <h2>Гаманці</h2>
+                <div>
+                    <a class="button" onclick="wallets.openCreate()">Створити</a>
+                    <a class="button" onclick="wallets.openUpdate()">Редагувати</a>
+                    <a class="button" onclick="sendDeleteWallet()">Видалити</a>
+                </div>
+            </div>
+            
+            <div id="wallets_block" class="page_width">
+                <div>
+                    <table id="wallet_table" ng-model="items">
+                        <tr>
+                            <th columns="1" onclick="tableSort(this, 'wallet_table')">Назва</th>
+                            <th columns="2" onclick="tableSort(this, 'wallet_table')">Баланс</th>
+                            <th columns="3" onclick="tableSort(this, 'wallet_table')">Валюта</th>
+                        </tr>
+                        <tr ng-repeat="i in items" class="w rows" checked=false>
+                            <td style="display: none">{{i.id}}</td>
+                            <td>{{i.name}}</td>
+                            <td>{{i.balance}}</td>
+                            <td>{{i.currency.name}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <br><br><br>
+            <div class="page_width page_head">
+                <h2>Валюта</h2>
+                <div>
+                    <a class="button" onclick="currency.openCreate()">Створити</a>
+                    <a class="button" onclick="currency.openUpdate()">Редагувати</a>
+                    <a class="button" onclick="sendDeleteCurrency()">Видалити</a>
+                </div>
+            </div>
+            <div id="currency_block" class="page_width">
+                <div>
+                    <table id="currency_table" ng-model="items_currency">
+                        <tr>
+                            <th columns="1" onclick="tableSort(this, 'currency_table')">Назва</th>
+                            <th columns="2" onclick="tableSort(this, 'currency_table')">Курс</th>
+                            <th columns="3" onclick="tableSort(this, 'currency_table')">Курс пояснення</th>
+                        </tr>
+                        <tr ng-repeat="i in items_currency" class="c rows" checked=false>
+                            <td style="display: none">{{i.id}}</td>
+                            <td>{{i.name}}</td>
+                            <td>{{i.ticker}}</td>
+                            <td>$ 1 = {{i.ticker}} {{i.name}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+      
+    <div id="create_wallet" class="additional_window hidden">
+        <div class="additional_window_background"></div>
+        <div class="window shadow-large">
+            <div class="window_header">Створити гаманець</div>
+            <form class="window_form">
+
+                <label for="addwallet_name">Назва</label>
+                <input id="addwallet_name" class="form-styling" type="text"/>
+
+                <label for="addwallet_balance">Баланс</label>
+                <input id="addwallet_balance" class="form-styling" type="number"
+                       min=".01" step=".01"/>
+
+                <label for="addwallet_currency">Валюта</label>
+                <select id="addwallet_currency" class="form-styling"></select>
+
+                <input class="window_form_btn" type="button" value="Створити гаманець" onclick="sendCreateWallet()">
+                <a class="close" href="#" onclick="wallets.closeCreate()"></a>
+
+            </form>
+        </div>
+    </div>
+
+    <div id="update_wallet" class="additional_window hidden">
+        <div class="additional_window_background"></div>
+        <div class="window shadow-large">
+            <div id="updatewallet_name_head" class="window_header">Оновити гаманець</div>
+            <form class="window_form"> 
+                <span class="explain">Заповніть тільки ті поля, які мають бути змінені</span>
+
+                <label for="updatewallet_name">Нове імʼя</label>
+                <input id="updatewallet_name" class="form-styling" type="text"/>
+
+                <input class="window_form_btn" type="button" value="Оновити гаманець" onclick="sendUpdateWallet()">
+                <a class="close" href="#" onclick="wallets.closeUpdate()"></a>
+
+            </form>
+        </div>
+    </div>
+
+    <div id="create_currency" class="additional_window hidden">
+        <div class="additional_window_background"></div>
+        <div class="window shadow-large">
+            <div class="window_header">Створити валюту</div>
+            <form class="window_form">
+
+                <label for="addcurrency_name">Назва</label>
+                <input id="addcurrency_name" class="form-styling" type="text"/>
+
+                <label for="addcurrency_ticker">Курс (1 національної валюти / 1$)</label>
+                <input id="addcurrency_ticker" class="form-styling" type="number" min="0.01"/>
+
+                <input class="window_form_btn" type="button" value="Створити валюту" onclick="sendCreateCurrency()">
+                <a class="close" href="#" onclick="currency.closeCreate()"></a>
+
+            </form>
+        </div>
+    </div>
+
+    <div id="update_currency" class="additional_window hidden">
+        <div class="additional_window_background"></div>
+        <div class="window shadow-large">
+            <div id="updatecurrency_name_head" class="window_header">Оновити валюту</div>
+            <form class="window_form">
+                 <span class="explain">Заповніть тільки ті поля, які мають бути змінені</span>
+
+                <label for="updatecurrency_name">Нове імʼя</label>
+                <input id="updatecurrency_name" class="form-styling" type="text"/>
+
+                <label for="updatecurrency_ticker">Новий курс (1 національної валюти / 1$)</label>
+                <input id="updatecurrency_ticker" class="form-styling" type="number" min="0.01" />
+
+                <input class="window_form_btn" type="button" value="Оновити валюту" onclick="sendUpdateCurrency()">
+                <a class="close" href="#" onclick="currency.closeUpdate()"></a>
+
+            </form>
+        </div>
+    </div>
+
+    </div>
+</body>
+
+<script type="text/javascript">
+</script>
+
+</html>

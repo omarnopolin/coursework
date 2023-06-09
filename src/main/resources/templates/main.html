@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta charset="utf-8">
+    <meta name="description" content="cashflow">
+    <meta name="keywords" content="HTML, CSS, JS, Java, ucode, unitfactory, cbl, cblworld">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>cashflow</title>
+    <link rel="shortcut icon" th:href="@{/resources/go-green/favicon.ico}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/resources/reset.css}"/>
+    <link rel="stylesheet" th:href="@{/resources/general.css}"/>
+
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+    <script th:src="@{/resources/general.js}"></script>
+    <script th:src="@{/resources/main_requests.js}"></script>
+    <script th:src="@{/resources/main.js}"></script>
+</head>
+
+<body>
+    <div class="backcolor"></div>
+    <div class="body-block shadow-large">
+        <section class="section1">
+            <a id="authorizedLogin" sec:authorize="isAuthenticated()" sec:authentication="name"></a>
+            <a class="abutton" href="/logout" th:method="Post">Вийти</a>
+        </section>
+
+        <header class="section2">
+            <a href="/"><img id="logo" th:src="@{/resources/img/logo.png}"></a>
+            <div class="section3">
+                <a class="header-button" href="wallets">
+                    <img th:src="@{/resources/go-green/dollar_sign.png}">
+                    <span>Гаманці</span>
+                </a>
+                <a class="header-button" href="transactions">
+                    <img th:src="@{/resources/go-green/list.png}">
+                    <span>Транзакції</span>
+                </a>
+                 <a class="header-button" href="categories">
+                    <img th:src="@{/resources/go-green/server.png}">
+                    <span>Категорії</span>
+                </a>
+                <a class="header-button" href="statistics">
+                    <img th:src="@{/resources/go-green/stats.png}">
+                    <span>Статистика</span>
+                </a>
+                <a class="header-button" href="https://api.monobank.ua" target="_blank">
+                    <img th:src="@{/resources/go-green/stats.png}">
+                    <span>Монобанк</span>
+                </a>
+            </div>
+        </header>
+
+        <section class="section4" ng-app="get_form" ng-controller="GetController" data-ng-init="getItems()">
+            <div class="page_width page_head">
+                <div ng-model="items_wallets">
+                    <h2><label for="select_wallet">Транзакції by wallet</label></h2>
+                    <select id="select_wallet" class="form-styling" onchange="main.select_wallet_transaction(this)">
+                        <option>Filter by wallet</option>
+                        <option wallet_id="0">All wallets</option>
+<!--                        <option ng-repeat="i in items_wallets" value="{{i.id}}">{{i.name}}</option>-->
+                    </select>
+<!--                    <script type="text/javascript">-->
+<!--                        $(document).ready(function() {-->
+<!--                            $("#select_wallet").change(function () {-->
+<!--                                categoryId = $('#categories_filter').val();-->
+<!--                                pageNo = 1;-->
+<!--                                replace();-->
+<!--                            });-->
+<!--                        });-->
+<!--                    </script>-->
+                </div>
+
+                <div>
+                    <!--                    <a class="button" onclick="transactions.openCreate()">Create</a>-->
+                    <!--                    <a class="button" onclick="transactions.openUpdate()">Update</a>-->
+<!--                    <a class="button" onclick="sendDeleteTransactions()">Delete all transaction by wallet</a>-->
+                </div>
+            </div>
+
+            <div id="transactions_block" class="page_width">
+                <div>
+                    <table id="table" ng-model="items_transactions">
+                        <tr>
+                            <th columns="0" onclick="tableSort(this, 'table')">Id</th>
+                            <th columns="1" onclick="tableSort(this, 'table')">Description</th>
+                            <th columns="2" onclick="tableSort(this, 'table')">Type</th>
+                            <th columns="3" onclick="tableSort(this, 'table')">Category</th>
+                            <th columns="4" onclick="tableSort(this, 'table')">Tag</th>
+                            <th columns="5" onclick="tableSort(this, 'table')">Price, $</th>
+                            <th columns="6" onclick="tableSort(this, 'table')">Wallet</th>
+                        </tr>
+                        <tbody id="transaction_table">
+                            <tr ng-repeat="i in items_transactions" class="rows" checked=false>
+                                <td>{{i.id}}</td>
+                                <td>{{i.description}}</td>
+                                <td>{{i.type}}</td>
+                                <td>{{i.category.name}}</td>
+                                <td>{{i.tag.name}}</td>
+                                <td>{{i.tag.price}}</td>
+                                <td>{{i.wallet.name}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="page_width page_head">
+                <p>Delete all transactions by wallet with wallet as well</p>
+                <div>
+                    <a class="button" onclick="sendDeleteAllTransactions()">Delete all</a>
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+</body>
+
+</html>

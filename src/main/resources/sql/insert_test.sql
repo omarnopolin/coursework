@@ -1,0 +1,32 @@
+-- INSERT INTO users VALUES (1, 'omarnopolin.fitu20@kubg.edu.ua', 'oarnopolin', '1', null, 1);
+--
+-- INSERT INTO currency VALUES (1, 'UAN', 30);
+-- INSERT INTO currency VALUES (2, 'USD', 1);
+-- INSERT INTO currency VALUES (3, 'EUR', 0.9);
+--
+-- INSERT INTO wallet VALUES (1, 1020, 'Гривневий гаманець', 1, 1);
+-- INSERT INTO wallet VALUES (2, 20, 'Долоровий гаманець', 2, 1);
+-- INSERT INTO wallet VALUES (3, 688, 'Євровий гаманець', 3, 1);
+--
+-- INSERT INTO category VALUES (1, 'Магазин', 'Супермаркет');
+-- INSERT INTO category VALUES (2, 'Іспанія', 'Відпустка');
+-- INSERT INTO category VALUES (3, 'Кіоск', 'Маленький магазин');
+-- INSERT INTO category VALUES (4, 'Авіаквитки', 'Квитки');
+-- INSERT INTO category VALUES (5, 'Ресторани', 'обіди');
+-- INSERT INTO category VALUES (6, 'Донати', 'донати');
+-- INSERT INTO category VALUES (7, 'Заробітня плата', 'зп');
+--
+-- INSERT INTO tag VALUES (1, 'Яблуко', 'яблуко', 1);
+-- INSERT INTO tag VALUES (2, 'Квиток на автобус', 'tickets', 3);
+-- INSERT INTO tag VALUES (3, 'Нова футболка', 'речі', 20);
+-- INSERT INTO tag VALUES (4, 'Монітор', 'монітор', 500);
+-- INSERT INTO tag VALUES (5, 'Новий телефон', 'телефон', 1500);
+-- INSERT INTO tag VALUES (6, 'Вечеря в пʼятницю', 'вечеря', 20);
+-- INSERT INTO tag VALUES (7, 'Компанія', 'зарплата за місяць', 1000);
+--
+-- INSERT INTO transaction VALUES (1, pg_stat_get_snapshot_timestamp(), 'decembers', 'expenses', 5, 7, 1);
+-- INSERT INTO transaction VALUES (2, pg_stat_get_snapshot_timestamp(), 'Іжа', 'expenses', 1, 5, 1);
+-- INSERT INTO transaction VALUES (4, pg_stat_get_snapshot_timestamp(), 'Речі', 'expenses', 2, 3, 1);
+--
+-- INSERT INTO transaction VALUES (5, pg_stat_get_snapshot_timestamp(), 'Заробітня плата за травень', 'income', 7, 7, 1);
+--

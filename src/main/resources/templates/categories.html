@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta charset="utf-8">
+    <meta name="description" content="cashflow">
+    <meta name="keywords" content="HTML, CSS, JS, Java, ucode, unitfactory, cbl, cblworld">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>cashflow</title>
+    <link rel="shortcut icon" th:href="@{/resources/go-green/favicon.ico}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/resources/reset.css}"/>
+    <link rel="stylesheet" th:href="@{/resources/general.css}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+    <script th:src="@{/resources/general.js}"></script>
+    <script th:src="@{/resources/categories.js}"></script>
+    <script th:src="@{/resources/categories_requests.js}"></script>
+</head>
+
+<body>
+    <div class="backcolor"></div>
+    <div class="body-block shadow-large">
+
+        <section class="section1">
+            <a id="authorizedLogin" sec:authorize="isAuthenticated()" sec:authentication="name"></a>
+            <a class="abutton" href="/logout">Вийти</a>
+        </section>
+        
+        <header class="section2">
+            <a href="/"><img id="logo" th:src="@{/resources/img/logo.png}"></a>
+            <div class="section3">
+                <a class="header-button" href="wallets">
+                    <img th:src="@{/resources/go-green/dollar_sign.png} ">
+                    <span>Гаманці</span>
+                </a>
+                <a class="header-button" href="transactions">
+                    <img th:src="@{/resources/go-green/list.png}">
+                    <span>Транзакції</span>
+                </a>
+                 <a class="header-button active">
+                    <img th:src="@{/resources/go-green/server.png}">
+                    <span>Категорії</span>
+                </a>
+                <a class="header-button" href="statistics">
+                    <img th:src="@{/resources/go-green/stats.png}">
+                    <span>Статистика</span>
+                </a>
+                <a class="header-button" href="https://api.monobank.ua" target="_blank">
+                    <img th:src="@{/resources/go-green/stats.png}">
+                    <span>Монобанк</span>
+                </a>
+            </div>
+        </header>
+
+        <section class="section4"
+                 ng-app="get_form" ng-controller="GetController" data-ng-init="getItems()">
+            <div class="page_width page_head">
+                <h2>Категорії</h2>
+                <div>
+                    <a class="button" onclick="categories.openCreate()">Створити</a>
+                    <a class="button" onclick="categories.openUpdate()">Редагувати</a>
+                    <a class="button" onclick="sendDeleteCategory()">Видалити</a>
+                </div>
+            </div>
+            
+            <div id="categories_block" class="page_width">
+                <div>
+                    <table id="category_table" ng-model="items">
+                        <tr>
+                            <th columns="1" onclick="tableSort(this, 'category_table')">Назва</th>
+                            <th columns="2" onclick="tableSort(this, 'category_table')">Опис</th>
+                        </tr>
+                        <tr ng-repeat="i in items" class="c rows" checked=false>
+                            <td style="display: none">{{i.id}}</td>
+                            <td>{{i.name}}</td>
+                            <td>{{i.description}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <br><br><br>
+            <div class="page_width page_head">
+                <h2>Теги</h2>
+                <div>
+                    <a class="button" onclick="tags.openCreate()">Створити</a>
+                    <a class="button" onclick="tags.openUpdate()">Редагувати</a>
+                    <a class="button" onclick="sendDeleteTag()">Видалити</a>
+                </div>
+            </div>
+            <div id="tags_block" class="page_width">
+                <div>
+                    <table id="tag_table" ng-model="items_tags">
+                        <tr>
+                            <th columns="1" onclick="tableSort(this, 'tag_table')">Назва</th>
+                            <th columns="2" onclick="tableSort(this, 'tag_table')">Опис</th>
+                            <th columns="3" onclick="tableSort(this, 'tag_table')">Ціна, $</th>
+                        </tr>
+                        <tr ng-repeat="i in items_tags" class="t rows" checked=false>
+                            <td style="display: none">{{i.id}}</td>
+                            <td>{{i.name}}</td>
+                            <td>{{i.description}}</td>
+                            <td>{{i.price}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+      
+    <div id="create_category" class="additional_window hidden">
+        <div class="additional_window_background"></div>
+        <div class="window shadow-large">
+            <div class="window_header">Створити категорію</div>
+            <form class="window_form">
+
+<!--                <label for="addcategory_icon">Icon</label>-->
+<!--                <input id="addcategory_icon" class="form-styling" type="file" value="icon"/>-->
+
+                <label for="addcategory_name">Назва</label>
+                <input id="addcategory_name" class="form-styling" type="text"/>
+
+                <label for="addcategory_description">Опис</label>
+                <input id="addcategory_description" class="form-styling" type="text"/>
+
+                <input class="window_form_btn" type="button" value="Створити категорію" onclick="sendCreateCategory()">
+                <a class="close" href="#" onclick="categories.closeCreate()"></a>
+
+            </form>
+        </div>
+    </div>
+
+    <div id="update_category" class="additional_window hidden">
+        <div class="additional_window_background"></div>
+        <div class="window shadow-large">
+            <div id="updatecategory_name_head" class="window_header">Редагквати категорію</div>
+            <form class="window_form"> 
+                <span class="explain">Заповніть тільки ті поля, які мають бути змінені</span>
+
+<!--                <label for="updatecategory_icon">New icon</label>-->
+<!--                <input id="updatecategory_icon" class="form-styling" type="file" value="icon"/>-->
+
+                <label for="updatecategory_name">Нове імʼя</label>
+                <input id="updatecategory_name" class="form-styling" type="text"/>
+
+                <label for="updatecategory_description">Description</label>
+                <input id="updatecategory_description" class="form-styling" type="text"/>
+
+                <input class="window_form_btn" type="button" value="Редагувати категорію" onclick="sendUpdateCategory()">
+                <a class="close" href="#" onclick="categories.closeUpdate()"></a>
+
+            </form>
+        </div>
+    </div>
+
+    <div id="create_tag" class="additional_window hidden">
+        <div class="additional_window_background"></div>
+        <div class="window shadow-large">
+            <div class="window_header">Create tag</div>
+            <form class="window_form">
+
+                <!--                <label for="addcategory_icon">Icon</label>-->
+                <!--                <input id="addcategory_icon" class="form-styling" type="file" value="icon"/>-->
+
+                <label for="addtag_name">Назва</label>
+                <input id="addtag_name" class="form-styling" type="text"/>
+
+                <label for="addtag_description">Description</label>
+                <input id="addtag_description" class="form-styling" type="text"/>
+
+                <label for="addtag_price">Price (in US dollars, $)</label>
+                <input id="addtag_price" class="form-styling" type="number"
+                       min=".01" step=".01"/>
+
+                <input class="window_form_btn" type="button" value="Create tag" onclick="sendCreateTag()">
+                <a class="close" href="#" onclick="tags.closeCreate()"></a>
+
+            </form>
+        </div>
+    </div>
+
+    <div id="update_tag" class="additional_window hidden">
+        <div class="additional_window_background"></div>
+        <div class="window shadow-large">
+            <div id="updatetag_name_head" class="window_header">Оновити тег</div>
+            <form class="window_form">
+                <span class="explain">Заповніть тільки ті поля, які мають бути змінені</span>
+
+                <label for="updatetag_name">Нове імʼя</label>
+                <input id="updatetag_name" class="form-styling" type="text"/>
+
+                <label for="updatetag_description">Description</label>
+                <input id="updatetag_description" class="form-styling" type="text"/>
+
+                <label for="updatetag_price">Price</label>
+                <input id="updatetag_price" class="form-styling" type="number"
+                       min=".01" step=".01"/>
+
+                <input class="window_form_btn" type="button" value="Оновити тег" onclick="sendUpdateTag()">
+                <a class="close" href="#" onclick="tags.closeUpdate()"></a>
+
+            </form>
+        </div>
+    </div>
+
+    </div>
+</body>
+
+<script type="text/javascript">
+
+</script>
+
+</html>

@@ -1,0 +1,97 @@
+.frame {
+	width: 350px;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 5px;
+	-webkit-transition: all .5s ease;
+	transition: all .5s ease;
+}
+
+.form-signin {
+	height: 300px;
+	font-weight: 300;
+	padding-top: 55px;
+	margin-bottom: 30px;
+	-webkit-transition: opacity .5s ease, -webkit-transform .5s ease;
+}
+
+.form-signup {
+	height: 500px;
+	font-size: 16px;
+	font-weight: 300;
+	padding-top: 55px;
+	position: relative;
+	-webkit-transition: all .5s ease;
+	transition: all .5s ease;
+}
+
+label {
+	text-transform: uppercase;
+	text-align: center;
+	padding-left: 15px;
+	padding-bottom: 10px;
+	font-weight: 500;
+	display: block;
+}
+
+.form-signin input,
+.form-signup input {
+	background: rgba(183, 201, 109,.3);
+	font-weight: 500;
+}
+.form-signin input:focus,
+.form-signup input:focus {
+    background: rgba(183, 201, 109,.3);
+    border: none;
+    -webkit-transition: background .5s ease;
+    transition: background .5s ease;
+}
+
+.btn-signup,
+.btn-signin {
+	float: left;
+	font-weight: 700;
+	text-transform: uppercase;
+	text-align: center;
+	width: 100%;
+	height: 35px;
+	border: none;
+	border-radius: 20px;
+	margin-top: 23px;
+	background-color: #b7c96d !important;
+}
+
+.btn-signup:hover,
+.btn-signin:hover,
+.btn-signup:focus,
+.btn-signin:focus,
+.btn-signup:active,
+.btn-signin:active {
+	cursor: pointer;
+	color: white;
+	-webkit-transition: background-color .5s;
+	transition: background-color .5s;
+}
+.field-icon {
+  float: right;
+  margin-right: 15px;
+  margin-top: -45px;
+  position: relative;
+}
+
+.forgot {
+	height: 100px;
+	width: 80%;
+	margin: 25px auto;
+	text-align: center;
+	font-weight: 400;
+	font-size: 13px;
+	text-decoration: none;
+}
+
+#emailRestorePass {
+	width: 62% !important;
+	display: inline;
+}
+
+
